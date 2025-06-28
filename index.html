@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./server/static/icon.png" type="image/x-icon">
+    <title>The Rahmany</title>
+    <link rel="stylesheet" href="./server/static/style.css"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>تسجيل الدخول</h1>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">اسم المخزن:</label>
+                <select id="username" name="username" required>
+                    <option value="">اختر اسم المخزن</option>
+                    </select>
+            </div>
+            <div class="form-group">
+                <label for="password">كلمة المرور:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit">تسجيل الدخول</button>
+            <p id="error-message"></p>
+            <p style="margin-top: 20px;"><a href="./clint/register.html" style="color: #1976d2; text-decoration: none;">ليس لديك حساب؟ إنشاء حساب جديد</a></p>
+        </form>
+    </div>
+
+    <script src="./server/script.js"></script> 
+    <script>
+        // Function to parse CSV (remains the same)
+        function parseCSV(csv) {
+            const lines = csv.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+            if (lines.length === 0) return [];
+
+            const headers = lines[0].split(',').map(header => header.trim());
+            const data = [];
+
+            for (let i = 1; i < lines.length; i++) {
+                const values = lines[i].split(',').map(value => value.trim());
+                const row = {};
+                headers.forEach((header, index) => {
+                    row[header] = values[index] ? values[index].trim() : '';
+                });
+                data.push(row);
+            }
+            return data;
+        }
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            const usernameSelect = document.getElementById('username');
+            const errorMessageDiv = document.getElementById('error-message');
+            const spreadsheetId = '1m2lG_BqYVosJKJDMPisFiy3nf0ndAoPDb_afB6xwPJ4'; // معرف جدول بيانات المستخدمين
+            const usersCsvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+
+            try {
+                const response = await fetch(usersCsvUrl);
+                if (!response.ok) {
+                    throw new Error(`لم نتمكن من الوصول لبيانات المستخدمين. تحقق من اتصال الإنترنت أو إعدادات النشر للجدول.`);
+                }
+                const csvText = await response.text();
+                const users = parseCSV(csvText);
+
+                // Populate the dropdown with usernames
+                const uniqueUsernames = [...new Set(users.map(user => user.name))]; // Get unique usernames
+                uniqueUsernames.forEach(username => {
+                    const option = document.createElement('option');
+                    option.value = username;
+                    option.textContent = username;
+                    usernameSelect.appendChild(option);
+                });
+
+            } catch (error) {
+                console.error('Error fetching or populating user data for dropdown:', error);
+                errorMessageDiv.textContent = `حدث خطأ أثناء تحميل قائمة المخازن: ${error.message}. يرجى المحاولة لاحقاً.`;
+                errorMessageDiv.style.display = 'block';
+            }
+
+            // Check if user is already logged in
+            const selectedWarehouseForInventory = localStorage.getItem('selectedWarehouseForInventory');
+            if (selectedWarehouseForInventory) {
+                // Redirect to profile if already logged in, no need to show login page
+                window.location.href = './clint/profile.html';
+            }
+        });
+
+        document.getElementById('loginForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const usernameSelect = document.getElementById('username');
+            const passwordInput = document.getElementById('password');
+            const errorMessageDiv = document.getElementById('error-message');
+
+            const enteredUsername = usernameSelect.value.trim();
+            const enteredPassword = passwordInput.value.trim();
+
+            errorMessageDiv.style.display = 'none';
+            errorMessageDiv.textContent = '';
+
+            // Validate that a username is selected
+            if (enteredUsername === "") {
+                errorMessageDiv.textContent = 'الرجاء اختيار اسم المخزن.';
+                errorMessageDiv.style.display = 'block';
+                return; // Stop execution if no username is selected
+            }
+
+            const spreadsheetId = '1m2lG_BqYVosJKJDMPisFiy3nf0ndAoPDb_afB6xwPJ4';
+            const usersCsvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+
+            try {
+                const response = await fetch(usersCsvUrl);
+                if (!response.ok) {
+                    throw new Error(`لم نتمكن من الوصول لبيانات المستخدمين. تحقق من اتصال الإنترنت أو إعدادات النشر للجدول.`);
+                }
+                const csvText = await response.text();
+                const users = parseCSV(csvText);
+
+                let isAuthenticated = false;
+                for (const user of users) {
+                    if (user.name === enteredUsername && user.password === enteredPassword) {
+                        isAuthenticated = true;
+                        break;
+                    }
+                }
+
+                if (isAuthenticated) {
+                    localStorage.setItem('loggedInUser', enteredUsername);
+                    localStorage.setItem('loggedInPassword', enteredPassword);
+                    localStorage.setItem('selectedWarehouseForInventory', enteredUsername);
+                    window.location.href = './clint/profile.html';
+                } else {
+                    errorMessageDiv.textContent = 'كلمة المرور غير صحيحة للمخزن المحدد.';
+                    errorMessageDiv.style.display = 'block';
+                }
+
+            } catch (error) {
+                console.error('Error fetching or processing user data:', error);
+                errorMessageDiv.textContent = `حدث خطأ أثناء الاتصال بالنظام: ${error.message}. يرجى المحاولة لاحقاً.`;
+                errorMessageDiv.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>

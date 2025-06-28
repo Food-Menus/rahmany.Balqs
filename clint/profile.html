@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./../server/static/icon.png" type="image/x-icon">
+    <title>The Rahmany</title>
+    <link rel="stylesheet" href="./../server/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+</head>
+<body>
+
+    <div class="container">
+        <h1 id="welcomeMessage">مرحباً في نظام مخزن!</h1>
+        <div class="profile-buttons">
+            <a href="add-item.html" class="profile-button">
+                <i class="fas fa-plus-circle"></i>
+                <h3>إضافة نوع عنصر جديد</h3>
+                <p>أضف تفاصيل صنف جديد إلى المخزن.</p>
+            </a>
+            <a href="inventory.html" class="profile-button">
+                <i class="fas fa-boxes"></i>
+                <h3>جرد المخزن</h3>
+                <p>تصفح جميع العناصر المدخلة وقم بتحديث بيانات الجرد.</p>
+            </a>
+            <a href="print-data.html" id="printButton" class="profile-button">
+                <i class="fas fa-print"></i>
+                <h3>طباعة البيانات</h3>
+                <p>اطبع تقريرًا ببيانات الجرد الحالية.</p>
+            </a>
+            <a href="https://wa.me/+201068452537" class="profile-button" target="_blank">
+                <i class="fab fa-whatsapp"></i> <h3>محادثة واتساب</h3>
+                <p>تواصل معنا عبر واتساب الآن.</p>
+            </a>
+            <a href="./../server/static/ادارة مخازن الرحماني.apk" id="downloadAppButton" class="profile-button" download>
+                <i class="fab fa-android"></i> <h3>تحميل التطبيق للاندرويد</h3>
+                <p>احصل على تطبيقنا الآن!</p>
+            </a>
+            <a href="#" id="logoutButton" class="profile-button">
+                <i class="fas fa-sign-out-alt"></i> <h3>تسجيل خروج</h3>
+                <p>العودة لصفحة تسجيل الدخول.</p>
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('logoutButton').addEventListener('click', function(event) {
+            event.preventDefault(); // منع الانتقال الافتراضي للرابط
+
+            // مسح المتغيرات من Local Storage
+            localStorage.removeItem('selectedWarehouseForInventory');
+            localStorage.removeItem('loggedInUser');
+            localStorage.removeItem('loggedInPassword');
+
+            // الانتقال لصفحة الـ index
+            window.location.href = './../index.html'; // أو '../index.html' حسب المسار النسبي لصفحة الـ index
+        });
+
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const selectedWarehouseForInventory = localStorage.getItem('selectedWarehouseForInventory');
+        if (!selectedWarehouseForInventory) {
+            window.location.href = './../index.html'; // إعادة التوجيه إلى صفحة تسجيل الدخول إذا لم يكن هناك اسم مستخدم
+        } else {
+            document.getElementById('selectedWarehouseForInventory').textContent = selectedWarehouseForInventory;
+        }
+        });
+    </script>
+    <script src="./../server/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const username = localStorage.getItem('loggedInUser');
+            if (username) {
+                document.getElementById('welcomeMessage').innerText = `مرحباً بك يا ${username}!`;
+            }
+
+            // document.getElementById('printButton').addEventListener('click', function(event) {
+            //     event.preventDefault();
+            //     // We will handle printing from the inventory page for simplicity
+            //     alert('وظيفة الطباعة ستكون متاحة داخل صفحة جرد المخزن لسهولة التجميع.');
+            //     window.location.href = 'inventory.html'; // Redirect to inventory page to print from there
+            // });
+        });
+    </script>
+
+</body>
+</html>

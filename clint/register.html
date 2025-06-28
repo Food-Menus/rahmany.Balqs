@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./../server/static/icon.png" type="image/x-icon">
+    <title>The Rahmany</title>
+    <link rel="stylesheet" href="./../server/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>إنشاء حساب جديد</h1>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="newUsername">اسم المخزن:</label>
+                <input type="text" id="newUsername" name="newUsername" required>
+            </div>
+            <div class="form-group">
+                <label for="newPassword">كلمة المرور:</label>
+                <input type="password" id="newPassword" name="newPassword" required>
+            </div>
+            <div class="form-group">
+                <label for="confirmPassword">تأكيد كلمة المرور:</label>
+                <input type="password" id="confirmPassword" name="confirmPassword" required>
+            </div>
+            <button type="submit">تسجيل المخزن</button>
+            <p style="margin-top: 20px;"><a href="./../index.html" style="color: var(--dark-main); text-decoration: none;">هل لديك حساب بالفعل؟ تسجيل الدخول</a></p>
+        </form>
+    </div>
+
+    <script src="./../server/script.js"></script>
+    <script>
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbxejKwvSeSvgDKnx6bR9c1pOyNOkKSQi7VAB19oDD5wLPiIQ-M3ptjaVltnGiloG46n/exec'; // تأكد من تحديث هذا الرابط
+
+        document.getElementById('registerForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const username = document.getElementById('newUsername').value;
+            const password = document.getElementById('newPassword').value;
+            const confirmPassword = document.getElementById('confirmPassword').value;
+
+            if (password !== confirmPassword) {
+                alert('كلمة المرور وتأكيد كلمة المرور غير متطابقين!');
+                return;
+            }
+
+            try {
+                // Prepare data for Google Sheet
+                const data = {
+                    username: username,
+                    password: password // تذكر: هذا غير آمن في بيئة إنتاج حقيقية!
+                };
+
+                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // مهم لـ Google Apps Script Web App لتجنب مشاكل CORS
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data)
+                });
+
+                // Since mode is 'no-cors', we won't get a direct response status.
+                // We assume success if no network error occurred.
+                // In a real application, you'd handle the response more robustly.
+                alert('تم إنشاء الحساب بنجاح! سيتم حفظ بياناتك في Google Sheet.');
+                
+                // Optionally, store username/password locally for direct login
+                localStorage.setItem('loggedInUser', username);
+                localStorage.setItem('loggedInPassword', password);
+
+                window.location.href = 'profile.html'; // Redirect to profile page
+            } catch (error) {
+                console.error('Error registering user:', error);
+                alert('حدث خطأ أثناء إنشاء الحساب. يرجى المحاولة مرة أخرى لاحقًا.');
+            }
+        });
+    </script>
+</body>
+</html>

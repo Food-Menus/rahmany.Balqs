@@ -1,0 +1,432 @@
+@import url('https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap');
+
+/* --- المتغيرات الأساسية للألوان والخطوط --- */
+:root {
+    --primary-light: #f9fbe7; /* Light Lime Green */
+    --secondary-light: #e1f5fe; /* Light Sky Blue */
+    --accent-color: #ffcc80; /* Light Orange */
+    --text-color: #424242; /* Dark Gray */
+    --white: #ffffff;
+    --dark-blue: #1976d2; /* Deep Blue (Main brand color) */
+    --dark-green: #388e3c; /* Deep Green (Secondary accent/success) */
+    --dark-red: #d32f2f; /* Deep Red (Error/Danger) */
+    --light-bg-card: #fdfdfd; /* Lighter background for cards */
+    --border-color: #ddd; /* Light border color */
+    --error-color: #d32f2f; /* Explicit error color, same as dark-red */
+}
+
+/* --- إعادة تعيين الأنماط الأساسية والصندوقية --- */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Almarai', sans-serif;
+    color: var(--text-color); /* اللون الافتراضي للنص */
+    /* إضافة لتجنب بعض مشاكل iOS */
+    -webkit-tap-highlight-color: rgba(0, 0, 0, 0); /* يزيل تظليل النقر على iOS */
+    -webkit-text-size-adjust: 100%; /* يمنع تغيير حجم الخط التلقائي */
+}
+
+/* --- أنماط الجسم (Body) والخلفية العامة --- */
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+    background-size: 400% 400%;
+    animation: gradientAnimation 15s ease infinite;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; /* يدفع الـ header والـ footer للأطراف */
+    align-items: center;
+    overflow-x: hidden; /* يمنع ظهور شريط التمرير الأفقي */
+    font-size: 16px; /* حجم الخط الأساسي */
+}
+
+a {
+    text-decoration: none; /* لإزالة الخط تحت الروابط */
+}
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- أنماط الحاويات العامة (Container) --- */
+.container {
+    background-color: var(--white);
+    padding: 2.5rem; /* استخدام rem للبادينج */
+    border-radius: 1rem; /* استخدام rem للحواف */
+    box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.1); /* استخدام rem للظل */
+    text-align: center;
+    max-width: 90%; /* عرض أقصى كنسبة مئوية */
+    width: 35rem; /* استخدام rem للعرض الأساسي (500px = 31.25rem إذا كان 1rem=16px) */
+    margin: 1.25rem auto; /* استخدام rem للهامش */
+}
+
+/* --- أنماط شريط التنقل (Navbar) --- */
+.navbar {
+    width: 100%;
+    background-color: var(--dark-blue);
+    padding: 1rem 1.875rem; /* استخدام rem للبادينج */
+    box-shadow: 0 0.125rem 0.625rem rgba(0, 0, 0, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--white);
+}
+
+.navbar .brand {
+    font-size: 1.8em; /* استخدام em للحجم النسبي */
+    font-weight: 700;
+    color: var(--white);
+    text-decoration: none;
+}
+
+/* --- أنماط التذييل (Footer) --- */
+.footer {
+    width: 100%;
+    background-color: var(--dark-blue);
+    padding: 0.9375rem 0; /* استخدام rem للبادينج */
+    text-align: center;
+    color: var(--white);
+    margin-top: auto;
+}
+
+.footer p {
+    color: var(--white);
+    font-size: 0.9em;
+}
+
+/* --- أنماط العناوين (Headings) --- */
+h1, h2 {
+    color: var(--dark-green);
+    margin-bottom: 1.25rem; /* استخدام rem للهامش */
+    font-size: 2em; /* استخدام em للحجم النسبي */
+}
+h2 {
+    font-size: 1.5em;
+}
+
+/* --- أنماط مجموعات النموذج (Form Groups) --- */
+.form-group {
+    margin-bottom: 0.9375rem; /* استخدام rem للهامش */
+    text-align: right;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 0.3125rem; /* استخدام rem للهامش */
+    font-weight: 600;
+    color: var(--text-color);
+}
+
+/* --- أنماط حقول الإدخال والاختيار والنص (Inputs, Select, Textarea) --- */
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="number"],
+.form-group textarea,
+.form-group select {
+    width: 100%;
+    padding: 0.75rem; /* استخدام rem للبادينج */
+    border: 0.0625rem solid var(--border-color); /* استخدام rem للحدود */
+    border-radius: 0.5rem; /* استخدام rem للحواف */
+    font-size: 1em;
+    direction: rtl;
+    text-align: right;
+    box-sizing: border-box;
+    background-color: var(--white);
+    color: var(--text-color);
+    /* تثبيت الألوان والمظهر على iOS */
+    -webkit-appearance: none; /* يزيل المظهر الافتراضي لعناصر الفورم على iOS */
+    -moz-appearance: none;
+    appearance: none;
+    background-image: none; /* يزيل أي خلفيات افتراضية */
+}
+
+/* أنماط خاصة بعناصر الـ select لتصحيح مظهر السهم على iOS */
+.form-group select {
+    background-image: url('data:image/svg+xml;utf8,<svg fill="%23424242" height="24" viewBox="0 0 24 24" width="24" xmlns="http://www.w3.org/2000/svg"><path d="M7 10l5 5 5-5z"/><path d="M0 0h24v24H0z" fill="none"/></svg>');
+    background-repeat: no-repeat;
+    background-position: left 0.75rem center; /* يضبط موقع السهم ليتناسب مع rtl */
+    background-size: 1.5em; /* حجم السهم */
+    padding-left: 2.5rem; /* مساحة للسهم */
+}
+
+
+/* --- أنماط الأزرار (Buttons) --- */
+button {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    padding: 0.75rem 1.5625rem; /* استخدام rem للبادينج */
+    border: none;
+    border-radius: 0.5rem; /* استخدام rem للحواف */
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    margin-top: 0.625rem; /* استخدام rem للهامش */
+    /* تثبيت الألوان والمظهر على iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+button:hover {
+    background-color: #1565c0;
+    transform: translateY(-0.125rem); /* استخدام rem للتحويل */
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+/* --- أنماط الروابط العامة (Links) --- */
+a {
+    color: var(--dark-blue);
+    text-decoration: none;
+}
+
+a:hover {
+        text-decoration: none; /* لإزالة الخط تحت الروابط */
+
+}
+
+/* --- أنماط خاصة برسالة الخطأ (Error Message) --- */
+#error-message {
+    color: var(--error-color);
+    margin-top: 0.625rem; /* استخدام rem للهامش */
+    display: none;
+    font-size: 0.9em;
+    font-weight: bold;
+}
+
+/* --- أنماط خاصة بصفحة الملف الشخصي (Profile Page Specific) --- */
+.profile-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* استخدام rem للمسافة بين العناصر */
+    margin-top: 1.875rem; /* استخدام rem للهامش */
+}
+
+.profile-button {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: var(--accent-color);
+    padding: 1.25rem; /* استخدام rem للبادينج */
+    border-radius: 0.9375rem; /* استخدام rem للحواف */
+    box-shadow: 0 0.3125rem 0.9375rem rgba(0, 0, 0, 0.1); /* استخدام rem للظل */
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
+    text-decoration: none;
+    color: var(--text-color);
+}
+
+.profile-button:hover {
+    transform: translateY(-0.3125rem); /* استخدام rem للتحويل */
+    box-shadow: 0 0.5rem 1.25rem rgba(0, 0, 0, 0.15); /* استخدام rem للظل */
+}
+
+.profile-button i {
+    font-size: 3em;
+    color: var(--dark-blue);
+    margin-bottom: 0.625rem; /* استخدام rem للهامش */
+}
+
+.profile-button h3 {
+    font-size: 1.5em;
+    margin-bottom: 0.3125rem; /* استخدام rem للهامش */
+    color: var(--dark-green);
+}
+
+.profile-button p {
+    font-size: 0.9em;
+    color: #555;
+}
+
+/* --- أنماط خاصة بصفحة الجرد (Inventory Page Specific) --- */
+.item-inventory-section {
+    margin-top: 1.875rem; /* استخدام rem للهامش */
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem; /* استخدام rem للمسافة بين العناصر */
+}
+
+.item-card {
+    background-color: var(--light-bg-card);
+    padding: 1.25rem; /* استخدام rem للبادينج */
+    border-radius: 0.625rem; /* استخدام rem للحواف */
+    box-shadow: 0 0.125rem 0.5rem rgba(0, 0, 0, 0.05); /* استخدام rem للظل */
+    text-align: right;
+    border: 0.0625rem solid var(--border-color);
+}
+
+.item-card h3 {
+    color: var(--dark-green); /* استخدام اللون الأخضر الغامق */
+    margin-bottom: 0.9375rem; /* استخدام rem للهامش */
+    font-size: 1.5em;
+}
+
+.item-card p {
+    font-size: 0.9em;
+    color: #616161;
+    margin-bottom: 0.625rem; /* استخدام rem للهامش */
+}
+
+.item-card .form-group {
+    margin-bottom: 0.625rem; /* استخدام rem للهامش */
+}
+
+.item-card .form-group label {
+    font-size: 0.9em;
+    color: #757575;
+    font-weight: 500;
+}
+
+.item-card .form-group input {
+    padding: 0.5rem; /* استخدام rem للبادينج */
+    border-radius: 0.375rem; /* استخدام rem للحواف */
+    width: 100%;
+    box-sizing: border-box;
+    border: 0.0625rem solid var(--border-color);
+    background-color: var(--white);
+    color: var(--text-color);
+    direction: rtl;
+    text-align: right;
+    /* تثبيت الألوان والمظهر على iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+/* --- أنماط مؤشر التحميل (Loader) --- */
+.loader {
+    border: 0.25rem solid #f3f3f3;
+    border-top: 0.25rem solid var(--dark-blue);
+    border-radius: 50%;
+    width: 2.5rem; /* استخدام rem */
+    height: 2.5rem; /* استخدام rem */
+    animation: spin 1s linear infinite;
+    margin: 1.25rem auto; /* استخدام rem */
+}
+
+/* --- أنماط خاصة بصفحة طباعة البيانات (Table Styling) --- */
+.data-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1.875rem; /* استخدام rem للهامش */
+}
+
+.data-table th, .data-table td {
+    border: 0.0625rem solid var(--border-color);
+    padding: 0.625rem; /* استخدام rem للبادينج */
+    text-align: right;
+}
+
+.data-table th {
+    background-color: var(--dark-blue);
+    color: var(--white);
+}
+
+.data-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+.data-table tr:hover {
+    background-color: #e0e0e0;
+}
+
+/* --- استعلامات الوسائط (Media Queries) للتصميم المتجاوب --- */
+
+/* الأجهزة اللوحية الصغيرة والهواتف الكبيرة */
+@media (max-width: 768px) {
+    body {
+        font-size: 15px; /* تصغير حجم الخط الأساسي قليلاً */
+    }
+    .container {
+        padding: 1.5rem; /* تقليل البادينج */
+        width: 95%; /* عرض أكبر على الشاشات الأصغر */
+        border-radius: 1rem;
+    }
+    .navbar {
+        padding: 0.8rem 1.25rem;
+    }
+    .navbar .brand {
+        font-size: 1.6em;
+    }
+    h1 {
+        font-size: 1.8em;
+    }
+    h2 {
+        font-size: 1.3em;
+    }
+    .profile-button {
+        padding: 1rem;
+    }
+    .profile-button i {
+        font-size: 2.8em;
+    }
+    .profile-button h3 {
+        font-size: 1.4em;
+    }
+    .profile-button p {
+        font-size: 0.85em;
+    }
+    .inventory-items {
+        grid-template-columns: 1fr; /* عمود واحد للعناصر */
+    }
+    button {
+        padding: 0.8rem 1.25rem;
+        font-size: 1em;
+    }
+}
+
+/* الهواتف الصغيرة (مثل iPhone SE) */
+@media (max-width: 480px) {
+    body {
+        font-size: 14px; /* تصغير حجم الخط الأساسي أكثر */
+    }
+    .container {
+        padding: 1rem;
+        width: 98%;
+        border-radius: 0.8rem;
+    }
+    .navbar {
+        padding: 0.6rem 0.8rem;
+    }
+    .navbar .brand {
+        font-size: 1.4em;
+    }
+    h1 {
+        font-size: 1.5em;
+    }
+    h2 {
+        font-size: 1.1em;
+    }
+    .profile-button {
+        padding: 0.8rem;
+    }
+    .profile-button i {
+        font-size: 2.2em;
+    }
+    .profile-button h3 {
+        font-size: 1.2em;
+    }
+    .profile-button p {
+        font-size: 0.8em;
+    }
+    .form-group input, .form-group select, .form-group textarea {
+        padding: 0.6rem;
+    }
+    button {
+        padding: 0.6rem 1rem;
+        font-size: 0.9em;
+    }
+}
+
+/* الشاشات الكبيرة جداً (اختياري) */
+@media (min-width: 1200px) {
+    .container {
+        max-width: 1100px; /* عرض أقصى أكبر للشاشات الكبيرة */
+    }
+    body {
+        font-size: 17px; /* تكبير الخط قليلاً للشاشات الكبيرة */
+    }
+}

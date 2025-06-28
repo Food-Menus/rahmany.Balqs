@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./../server/static/icon.png" type="image/x-icon">
+    <title>The Rahmany</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Almarai:wght@300;400;700;800&display=swap" rel="stylesheet">
+<style>
+    :root {
+        --primary-light: #f9fbe7;
+        --secondary-light: #e1f5fe;
+        --accent-color: #ffcc80;
+        --text-color: #424242;
+        --white: #ffffff;
+        --dark-blue: #1976d2;
+        --dark-green: #388e3c;
+        --dark-red: #d32f2f; /* لون أحمر غامق ومناسب */
+        --light-yellow: #fffde7; /* لون أصفر فاتح للخلفية */
+    }
+
+    * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: 'Almarai', sans-serif;
+        color: var(--text-color) !important;
+    }
+
+    body {
+        min-height: 100vh;
+        background: linear-gradient(135deg, var(--primary-light) 0%, var(--secondary-light) 100%);
+        background-size: 400% 400%;
+        animation: gradientAnimation 15s ease infinite;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        overflow-x: hidden;
+    }
+
+    @keyframes gradientAnimation {
+        0% { background-position: 0% 50%; }
+        50% { background-position: 100% 50%; }
+        100% { background-position: 0% 50%; }
+    }
+
+    .container {
+        background-color: var(--white) !important;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        text-align: center;
+        max-width: 90%;
+        width: 1000px;
+        margin: 20px auto;
+    }
+
+    .navbar {
+        width: 100%;
+        background-color: var(--dark-blue) !important;
+        padding: 15px 30px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        color: var(--white) !important;
+    }
+
+    .navbar .brand {
+        font-size: 1.8em;
+        font-weight: 700;
+        color: var(--white) !important;
+        text-decoration: none;
+    }
+
+    .footer {
+        width: 100%;
+        background-color: var(--dark-blue) !important;
+        padding: 15px 0;
+        text-align: center;
+        color: var(--white) !important;
+        margin-top: auto;
+    }
+
+    .footer p {
+        color: var(--white) !important;
+        font-size: 0.9em;
+    }
+
+    h1, h2 {
+        color: var(--dark-green) !important;
+        margin-bottom: 20px;
+    }
+
+    .form-group {
+        margin-bottom: 15px;
+        text-align: right;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 5px;
+        font-weight: 600;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"],
+    .form-group input[type="number"],
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 12px;
+        border: 1px solid #ccc;
+        border-radius: 8px;
+        font-size: 1em;
+        direction: rtl;
+        text-align: right;
+    }
+
+    button {
+        background-color: var(--dark-blue) !important;
+        color: var(--white) !important;
+        padding: 12px 25px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 1.1em;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        margin-top: 10px;
+    }
+
+    button:hover {
+        background-color: #1565c0 !important;
+        transform: translateY(-2px);
+    }
+
+    button:active {
+        transform: translateY(0);
+    }
+
+    .profile-buttons {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        margin-top: 30px;
+    }
+
+    .profile-button {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        background-color: var(--accent-color) !important;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        transition: transform 0.3s ease, box-shadow 0.3s ease;
+        text-decoration: none;
+        color: var(--text-color) !important;
+    }
+
+    .profile-button:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    }
+
+    .profile-button i {
+        font-size: 3em;
+        color: var(--dark-blue) !important;
+        margin-bottom: 10px;
+    }
+
+    .profile-button h3 {
+        font-size: 1.5em;
+        margin-bottom: 5px;
+        color: var(--dark-green) !important;
+    }
+
+    .profile-button p {
+        font-size: 0.9em;
+        color: #555 !important;
+    }
+
+    .inventory-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 20px;
+        margin-top: 30px;
+        width: 100%;
+    }
+
+    .inventory-item {
+        background-color: #ffffff !important;
+        padding: 20px;
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        text-align: right;
+    }
+
+    .inventory-item h3 {
+        margin-bottom: 15px;
+        color: var(--dark-green) !important;
+    }
+
+    .inventory-item .item-details p {
+        margin-bottom: 5px;
+        font-size: 0.95em;
+    }
+
+    .inventory-item .item-inputs {
+        margin-top: 15px;
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 10px;
+    }
+
+    .inventory-item .item-inputs input {
+        width: 100%;
+        padding: 8px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 0.9em;
+        direction: rtl;
+        text-align: right;
+    }
+
+    .inventory-item .item-inputs label {
+        display: block;
+        margin-bottom: 3px;
+        font-size: 0.8em;
+        color: #666 !important;
+    }
+
+    .data-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px; /* قللنا المسافة هنا */
+        margin-bottom: 20px; /* قللنا المسافة هنا */
+    }
+
+    .data-table th, .data-table td {
+        border: 1px solid #ddd;
+        padding: 10px;
+        text-align: right;
+    }
+
+    .data-table th {
+        background-color: var(--dark-blue) !important;
+        color: var(--white) !important;
+    }
+
+    .data-table tr:nth-child(even) {
+        background-color: #f9f9f9 !important;
+    }
+
+    .data-table tr:hover {
+        background-color: #e0e0e0 !important;
+    }
+
+    @media (max-width: 768px) {
+        .container {
+            padding: 20px;
+            width: 95%;
+        }
+
+        .navbar {
+            padding: 10px 20px;
+        }
+
+        .navbar .brand {
+            font-size: 1.5em;
+        }
+
+        body {
+            font-size: 0.9em;
+        }
+
+        h1 {
+            font-size: 1.8em !important;
+        }
+
+        h2 {
+            font-size: 1.5em !important;
+        }
+
+        .form-group label,
+        .form-group input,
+        .form-group textarea,
+        .form-group select {
+            font-size: 0.9em !important;
+        }
+
+        button {
+            font-size: 1em !important;
+            padding: 10px 20px;
+        }
+
+        .profile-button h3 {
+            font-size: 1.2em !important;
+        }
+
+        .profile-button p {
+            font-size: 0.8em !important;
+        }
+
+        .inventory-item h3 {
+            font-size: 1.4em !important;
+        }
+
+        .inventory-item .item-details p {
+            font-size: 0.85em !important;
+        }
+
+        .inventory-item .item-inputs input {
+            font-size: 0.8em !important;
+        }
+
+        .data-table th, .data-table td {
+            font-size: 0.9em !important;
+            padding: 8px !important;
+        }
+
+        .data-table, .data-table thead, .data-table tbody, .data-table th, .data-table td, .data-table tr {
+            display: block;
+        }
+
+        .data-table thead tr {
+            position: absolute;
+            top: -9999px;
+            left: -9999px;
+        }
+
+        .data-table tr {
+            border: 1px solid #ccc;
+            margin-bottom: 15px;
+            display: block;
+            background-color: var(--white) !important;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+        }
+
+        .data-table td {
+            border: none !important;
+            border-bottom: 1px solid #eee !important;
+            position: relative;
+            padding-left: 10px !important;
+            text-align: right !important;
+            font-size: 1em;
+            word-wrap: break-word;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            padding-bottom: 10px;
+            padding-top: 10px;
+        }
+
+        .data-table td:last-child {
+            border-bottom: 0 !important;
+        }
+
+        .data-table td:before {
+            content: attr(data-label);
+            position: static;
+            width: 100%;
+            padding-right: 0;
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            font-weight: bold;
+            color: var(--dark-blue) !important;
+            margin-bottom: 5px;
+            text-align: right;
+        }
+        
+        #image-header {
+            font-size: 1.2em !important;
+        }
+    }
+
+    @media (min-width: 769px) and (max-width: 1024px) {
+        .container {
+            width: 90%;
+            padding: 25px;
+        }
+
+        .navbar .brand {
+            font-size: 1.6em;
+        }
+
+        h1 {
+            font-size: 2.2em;
+        }
+        h2 {
+            font-size: 1.8em;
+        }
+        .form-group input,
+        .form-group textarea,
+        .form-group select,
+        button {
+            font-size: 1em;
+            padding: 10px 20px;
+        }
+        .profile-button h3 {
+            font-size: 1.4em;
+        }
+        .inventory-item h3 {
+            font-size: 1.5em;
+        }
+        .data-table th, .data-table td {
+            font-size: 0.95em;
+            padding: 9px;
+        }
+        #image-header {
+            font-size: 1.4em;
+        }
+    }
+
+    #loading-message, #error-message, #no-data-message {
+        text-align: center;
+        margin-top: 50px;
+        font-size: 1.2em;
+        color: var(--dark-blue) !important;
+    }
+    #error-message {
+        color: var(--dark-red) !important;
+    }
+    #no-data-message {
+        color: #666 !important;
+    }
+    .product-section {
+        margin-bottom: 25px; /* قللنا المسافة هنا */
+        padding-bottom: 15px; /* قللنا المسافة هنا */
+        border-bottom: 1px dashed #ccc;
+    }
+    .product-section:last-child {
+        border-bottom: none;
+        margin-bottom: 0;
+        padding-bottom: 0;
+    }
+    .product-section h2 {
+        text-align: right;
+        margin-bottom: 5px; 
+        color: var(--dark-green) !important;
+        font-size: 1.8em;
+        /* Removed inline-block and vertical-align as updates-container handles layout */
+    }
+    .product-section .updates-container {
+        display: flex;
+        justify-content: space-between; /* لوزن العنوان مع الـ badge */
+        align-items: center;
+        margin-bottom: 10px; /* مسافة تحت العنوان ومربع التحديثات */
+        flex-wrap: wrap; /* للسماح بالعناصر بالانتقال لسطر جديد في الشاشات الصغيرة */
+    }
+    .product-section .updates-badge {
+        background-color: var(--light-yellow) !important; /* لون أصفر فاتح للخلفية */
+        color: var(--dark-red) !important; /* لون أحمر غامق ومناسب */
+        padding: 5px 10px;
+        border-radius: 8px; /* حواف دائرية */
+        font-size: 0.85em;
+        font-weight: 600;
+        border: 1px solid rgba(255, 0, 0, 0.2); /* حدود خفيفة باللون الأحمر */
+    }
+
+    .action-buttons {
+        margin-top: 20px;
+        margin-bottom: 20px;
+        display: flex;
+        justify-content: center;
+        gap: 15px;
+    }
+    .action-buttons button {
+        padding: 12px 20px;
+        font-size: 1em;
+    }
+
+    #printable-area {
+        background-color: var(--white) !important;
+        padding: 20px;
+        border-radius: 15px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        margin-top: 20px;
+        width: fit-content;
+        max-width: 90%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    #image-header {
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 1.5em;
+        font-weight: 700;
+        color: var(--dark-blue) !important;
+        padding: 10px 0;
+        border-bottom: 2px solid var(--accent-color);
+    }
+    #image-header span {
+        color: var(--dark-green) !important;
+    }
+
+    /* New styles for column controls */
+    .column-controls {
+        text-align: right;
+        margin-bottom: 20px;
+        padding: 15px;
+        background-color: var(--secondary-light);
+        border-radius: 10px;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+    }
+
+    .column-controls h3 {
+        margin-bottom: 10px;
+        color: var(--dark-blue) !important;
+        font-size: 1.3em;
+    }
+
+    .column-controls .checkbox-group {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 15px;
+        justify-content: flex-end; /* Align checkboxes to the right */
+    }
+
+    .column-controls .checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+
+    .column-controls .checkbox-item input[type="checkbox"] {
+        width: auto;
+        margin: 0;
+        cursor: pointer;
+    }
+
+    .column-controls .checkbox-item label {
+        margin: 0;
+        font-weight: normal;
+        cursor: pointer;
+        color: var(--text-color) !important;
+    }
+
+    .column-controls button {
+        margin-top: 0;
+        padding: 10px 20px;
+        font-size: 0.9em;
+    }
+</style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="#" class="brand">نظام إدارة المخزون</a>
+    </nav>
+
+    <div class="container">
+        <h1>بيانات المخزون المفلترة</h1>
+
+        <div class="column-controls">
+            <h3>عرض الأعمدة:</h3>
+            <div id="column-checkboxes" class="checkbox-group">
+                </div>
+            <button id="apply-columns-btn">تطبيق التغييرات</button>
+        </div>
+        <div class="action-buttons">
+            <button id="download-png-btn">تحميل كصورة PNG</button>
+            <button id="send-whatsapp-btn">إرسال عبر واتساب</button>
+        </div>
+        <div id="loading-message">جاري تحميل البيانات...</div>
+        <div id="error-message" style="display: none;"></div>
+        <div id="no-data-message" style="display: none;">لا توجد بيانات متاحة للمخزن المحدد أو التاريخ الأحدث.</div>
+        
+        <div id="printable-area" style="display: none;">
+            <div id="image-header">
+                نظام إدارة مخازن الرحماني بتاريخ: <span id="current-date-display"></span>
+            </div>
+            <div id="inventory-data">
+                </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <p>&copy; 2025 نظام إدارة المخزون. جميع الحقوق محفوظة.</p>
+    </footer>
+
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const spreadsheetId = '1GfKMjGQybK2i8sgVvEaxYkwB9QoZBGy_fIJXDqNXu98';
+            const sheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
+            const selectedWarehouse = localStorage.getItem('selectedWarehouseForInventory');
+            const whatsappNumber = '+201068452537';
+
+            const loadingMessage = document.getElementById('loading-message');
+            const errorMessage = document.getElementById('error-message');
+            const noDataMessage = document.getElementById('no-data-message');
+            const inventoryDataContainer = document.getElementById('inventory-data');
+            const printableArea = document.getElementById('printable-area');
+            const imageHeader = document.getElementById('image-header');
+            const currentDateDisplay = document.getElementById('current-date-display');
+            const downloadPngBtn = document.getElementById('download-png-btn');
+            const sendWhatsappBtn = document.getElementById('send-whatsapp-btn');
+            const columnCheckboxesContainer = document.getElementById('column-checkboxes');
+            const applyColumnsBtn = document.getElementById('apply-columns-btn');
+
+            let allInventoryData = []; // Store all fetched data to re-filter
+            let summarizedInventoryData = []; // Data after summarization for display
+
+            // Define all possible headers and their configurations
+            // Added 'aggregationType' to define how each column should be processed
+            const allHeadersConfig = [
+                { label: 'تاريخ الجرد', key: 'Inventory_Date', format: (val) => val ? new Date(val.split(' ')[0]).toLocaleDateString('ar-EG') : '', defaultVisible: true, aggregationType: 'latest' },
+                { label: 'المخزون الحالي', key: 'Inventory_Existing', defaultVisible: true, aggregationType: 'latest' }, // احدث قيمة
+                { label: 'المخزون المضاف اليوم', key: 'Inventory_New', defaultVisible: true, aggregationType: 'sum' }, // جمع
+                { label: 'المخزون المسحوب اليوم', key: 'Inventory_Pull', defaultVisible: true, aggregationType: 'sum' }, // جمع
+                { label: 'مخزون بداية اليوم', key: 'Inventory_Started', defaultVisible: true, aggregationType: 'first' }, // اول قيمة
+                { label: 'إجمالي الجديد الشهري', key: 'Monthly_Inventory_New', defaultVisible: true, aggregationType: 'latest' }, // احدث قيمة
+                { label: 'إجمالي المسحوب الشهري', key: 'Monthly_Inventory_Pull', defaultVisible: true, aggregationType: 'latest' } // احدث قيمة
+            ];
+
+            const today = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            currentDateDisplay.textContent = today.toLocaleDateString('ar-EG', options);
+
+            if (!selectedWarehouse) {
+                errorMessage.textContent = 'خطأ: لم يتم تحديد المخزن. يرجى تعيين "selectedWarehouseForInventory" في التخزين المحلي (Local Storage).';
+                errorMessage.style.display = 'block';
+                loadingMessage.style.display = 'none';
+                downloadPngBtn.style.display = 'none';
+                sendWhatsappBtn.style.display = 'none';
+                return;
+            }
+
+            // Initialize column checkboxes and load saved preferences
+            function initializeColumnControls() {
+                let savedColumnVisibility = JSON.parse(localStorage.getItem('columnVisibility')) || {};
+
+                allHeadersConfig.forEach(header => {
+                    const checkboxItem = document.createElement('div');
+                    checkboxItem.classList.add('checkbox-item');
+
+                    const input = document.createElement('input');
+                    input.type = 'checkbox';
+                    input.id = `col-${header.key}`;
+                    input.dataset.key = header.key;
+                    input.checked = (savedColumnVisibility[header.key] !== undefined) ? savedColumnVisibility[header.key] : header.defaultVisible;
+                    
+                    const label = document.createElement('label');
+                    label.htmlFor = `col-${header.key}`;
+                    label.textContent = header.label;
+
+                    checkboxItem.appendChild(input);
+                    checkboxItem.appendChild(label);
+                    columnCheckboxesContainer.appendChild(checkboxItem);
+                });
+            }
+
+            // Save column preferences and refresh data
+            applyColumnsBtn.addEventListener('click', () => {
+                const checkboxes = columnCheckboxesContainer.querySelectorAll('input[type="checkbox"]');
+                let currentColumnVisibility = {};
+                checkboxes.forEach(checkbox => {
+                    currentColumnVisibility[checkbox.dataset.key] = checkbox.checked;
+                });
+                localStorage.setItem('columnVisibility', JSON.stringify(currentColumnVisibility));
+                displayData(summarizedInventoryData); // Re-display data with new column preferences
+            });
+
+            async function fetchAndProcessData() {
+                try {
+                    const response = await fetch(sheetUrl);
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    const csvText = await response.text();
+                    allInventoryData = parseCSV(csvText); // Store all data
+
+                    if (allInventoryData.length === 0) {
+                        noDataMessage.textContent = 'لا توجد بيانات في الجدول.';
+                        noDataMessage.style.display = 'block';
+                        loadingMessage.style.display = 'none';
+                        downloadPngBtn.style.display = 'none';
+                        sendWhatsappBtn.style.display = 'none';
+                        return;
+                    }
+
+                    const filteredByWarehouse = allInventoryData.filter(row => row['Inventory_Item_warehouse'] === selectedWarehouse);
+
+                    if (filteredByWarehouse.length === 0) {
+                        noDataMessage.textContent = `لا توجد بيانات للمخزن "${selectedWarehouse}" في الجدول.`;
+                        noDataMessage.style.display = 'block';
+                        loadingMessage.style.display = 'none';
+                        downloadPngBtn.style.display = 'none';
+                        sendWhatsappBtn.style.display = 'none';
+                        return;
+                    }
+
+                    const latestDate = getLatestDate(filteredByWarehouse);
+
+                    if (!latestDate) {
+                        noDataMessage.textContent = `لم يتم العثور على تاريخ صالح للمخزن "${selectedWarehouse}".`;
+                        noDataMessage.style.display = 'block';
+                        loadingMessage.style.display = 'none';
+                        downloadPngBtn.style.display = 'none';
+                        sendWhatsappBtn.style.display = 'none';
+                        return;
+                    }
+
+                    const dataForLatestDate = filteredByWarehouse.filter(row => {
+                        const rowDate = new Date(row['Inventory_Date'].split(' ')[0]);
+                        return rowDate.toDateString() === latestDate.toDateString();
+                    });
+
+                    if (dataForLatestDate.length === 0) {
+                        noDataMessage.textContent = `لا توجد بيانات للمخزن "${selectedWarehouse}" في تاريخ ${latestDate.toLocaleDateString('ar-EG')}.`;
+                        noDataMessage.style.display = 'block';
+                        loadingMessage.style.display = 'none';
+                        downloadPngBtn.style.display = 'none';
+                        sendWhatsappBtn.style.display = 'none';
+                        return;
+                    }
+                    
+                    // Summarize data before displaying
+                    summarizedInventoryData = summarizeProductData(dataForLatestDate);
+
+                    displayData(summarizedInventoryData); // Initial display
+                    printableArea.style.display = 'block';
+                    downloadPngBtn.style.display = 'inline-block';
+                    sendWhatsappBtn.style.display = 'inline-block';
+
+                } catch (error) {
+                    console.error('Error fetching or processing data:', error);
+                    errorMessage.textContent = `حدث خطأ أثناء تحميل البيانات: ${error.message}. يرجى التأكد من أن الرابط صحيح وأن الجدول منشور.`;
+                    errorMessage.style.display = 'block';
+                    printableArea.style.display = 'none';
+                    downloadPngBtn.style.display = 'none';
+                    sendWhatsappBtn.style.display = 'none';
+                } finally {
+                    loadingMessage.style.display = 'none';
+                }
+            }
+
+            function parseCSV(csv) {
+                const lines = csv.split('\n').map(line => line.trim()).filter(line => line.length > 0);
+                if (lines.length === 0) return [];
+
+                const headers = lines[0].split(',').map(header => header.trim());
+                const data = [];
+
+                for (let i = 1; i < lines.length; i++) {
+                    const values = lines[i].split(',').map(value => value.trim());
+                    const row = {};
+                    headers.forEach((header, index) => {
+                        row[header] = values[index];
+                    });
+                    data.push(row);
+                }
+                return data;
+            }
+
+            function getLatestDate(data) {
+                let latestDate = null;
+                data.forEach(row => {
+                    const datePart = row['Inventory_Date'] ? row['Inventory_Date'].split(' ')[0] : null;
+                    if (datePart) {
+                        const currentDate = new Date(datePart);
+                        if (!isNaN(currentDate.getTime())) {
+                            if (!latestDate || currentDate > latestDate) {
+                                latestDate = currentDate;
+                            }
+                        }
+                    }
+                });
+                return latestDate;
+            }
+
+            // NEW FUNCTION: Summarizes product data based on aggregation type
+            function summarizeProductData(data) {
+                const summarized = {};
+
+                // Sort data by Inventory_Date (ascending) to correctly get 'first' and 'latest' values
+                // This assumes that if multiple records have the same date, their order doesn't matter for 'first'/'latest' among them.
+                // If time is also part of Inventory_Date, you might need to parse it for more precise sorting.
+                data.sort((a, b) => new Date(a['Inventory_Date'].split(' ')[0]) - new Date(b['Inventory_Date'].split(' ')[0]));
+
+
+                data.forEach(item => {
+                    const productName = item['Inventory_Item_name'];
+                    const warehouse = item['Inventory_Item_warehouse']; 
+
+                    if (!summarized[productName]) {
+                        summarized[productName] = {
+                            'Inventory_Item_name': productName,
+                            'Inventory_Item_warehouse': warehouse,
+                            'original_records_count': 0 
+                        };
+                        // Initialize all fields based on aggregation type
+                        allHeadersConfig.forEach(header => {
+                            if (header.aggregationType === 'sum') {
+                                summarized[productName][header.key] = 0;
+                            } else {
+                                summarized[productName][header.key] = null; // Or empty string, depending on desired default
+                            }
+                        });
+                    }
+
+                    // Process each field based on its aggregation type
+                    allHeadersConfig.forEach(header => {
+                        const value = item[header.key];
+                        const parsedValue = parseFloat(value) || 0; // For numeric operations
+
+                        switch (header.aggregationType) {
+                            case 'sum':
+                                summarized[productName][header.key] += parsedValue;
+                                break;
+                            case 'latest':
+                                // Always update with the latest value as we're iterating through sorted data
+                                summarized[productName][header.key] = value;
+                                break;
+                            case 'first':
+                                // Only set if it hasn't been set yet (i.e., it's still null from initialization)
+                                if (summarized[productName][header.key] === null) {
+                                    summarized[productName][header.key] = value;
+                                }
+                                break;
+                            default:
+                                // For non-defined or non-numeric types, just take the latest value for simplicity
+                                summarized[productName][header.key] = value;
+                                break;
+                        }
+                    });
+
+                    summarized[productName]['original_records_count']++;
+                });
+
+                // Convert summarized object back to an array for easier iteration in displayData
+                return Object.values(summarized);
+            }
+
+            function displayData(data) {
+                inventoryDataContainer.innerHTML = '';
+                if (data.length === 0) {
+                    noDataMessage.textContent = 'لا توجد بيانات مطابقة للمعايير المحددة.';
+                    noDataMessage.style.display = 'block';
+                    printableArea.style.display = 'none';
+                    downloadPngBtn.style.display = 'none';
+                    sendWhatsappBtn.style.display = 'none';
+                    return;
+                } else {
+                    noDataMessage.style.display = 'none';
+                    printableArea.style.display = 'block';
+                    downloadPngBtn.style.display = 'inline-block';
+                    sendWhatsappBtn.style.display = 'inline-block';
+                }
+
+                const visibleColumns = getVisibleColumns();
+
+                data.forEach(productSummary => { // Iterate directly over the summarized data
+                    const productSection = document.createElement('div');
+                    productSection.classList.add('product-section');
+
+                    const updatesContainer = document.createElement('div');
+                    updatesContainer.classList.add('updates-container');
+
+                    const productTitle = document.createElement('h2');
+                    productTitle.textContent = `المنتج: ${productSummary['Inventory_Item_name']}`;
+                    
+                    const updatesBadge = document.createElement('span');
+                    updatesBadge.classList.add('updates-badge');
+                    updatesBadge.textContent = `${productSummary['original_records_count']} تحديثات`; // Use the new count
+                    
+                    updatesContainer.appendChild(productTitle);
+                    updatesContainer.appendChild(updatesBadge);
+                    productSection.appendChild(updatesContainer);
+
+                    const table = document.createElement('table');
+                    table.classList.add('data-table');
+
+                    const thead = table.createTHead();
+                    const headerRow = thead.insertRow();
+                    visibleColumns.forEach(headerInfo => {
+                        const th = document.createElement('th');
+                        th.textContent = headerInfo.label;
+                        headerRow.appendChild(th);
+                    });
+
+                    const tbody = table.createTBody();
+                    const row = tbody.insertRow(); // Only one row per product summary
+                    visibleColumns.forEach(headerInfo => {
+                        const td = row.insertCell();
+                        td.setAttribute('data-label', headerInfo.label);
+                        const value = productSummary[headerInfo.key]; // Directly use the summarized value
+                        td.textContent = headerInfo.format ? headerInfo.format(value) : value;
+                    });
+                    
+                    productSection.appendChild(table);
+                    inventoryDataContainer.appendChild(productSection);
+                });
+            }
+
+            function getVisibleColumns() {
+                const checkboxes = columnCheckboxesContainer.querySelectorAll('input[type="checkbox"]');
+                let visibleKeys = [];
+                checkboxes.forEach(checkbox => {
+                    if (checkbox.checked) {
+                        visibleKeys.push(checkbox.dataset.key);
+                    }
+                });
+                return allHeadersConfig.filter(header => visibleKeys.includes(header.key));
+            }
+
+            downloadPngBtn.addEventListener('click', () => {
+                // Temporarily hide elements not needed in the screenshot
+                document.querySelector('h1').style.display = 'none';
+                document.querySelector('.action-buttons').style.display = 'none';
+                document.querySelector('.column-controls').style.display = 'none'; // Hide column controls too
+                
+                printableArea.style.display = 'block'; 
+                printableArea.style.backgroundColor = 'white';
+                printableArea.style.padding = '20px';
+
+                html2canvas(printableArea, {
+                    scale: 2,
+                    useCORS: true,
+                    backgroundColor: '#ffffff', 
+                }).then(canvas => {
+                    const link = document.createElement('a');
+                    link.download = `بيانات_مخزون_الرحماني_${selectedWarehouse || 'المخزن'}_${new Date().toLocaleDateString('en-CA')}.png`;
+                    link.href = canvas.toDataURL('image/png');
+                    link.click();
+                    
+                    // Restore original display styles
+                    document.querySelector('h1').style.display = 'block';
+                    document.querySelector('.action-buttons').style.display = 'flex';
+                    document.querySelector('.column-controls').style.display = 'block'; // Show column controls again
+
+                    if (summarizedInventoryData.length === 0) { // Use summarized data length
+                        printableArea.style.display = 'none';
+                    }
+                    printableArea.style.padding = '0';
+                }).catch(error => {
+                    console.error('Error generating PNG:', error);
+                    alert('حدث خطأ أثناء إنشاء الصورة. يرجى المحاولة مرة أخرى.');
+                    // Ensure elements are restored even on error
+                    document.querySelector('h1').style.display = 'block';
+                    document.querySelector('.action-buttons').style.display = 'flex';
+                    document.querySelector('.column-controls').style.display = 'block';
+                    if (summarizedInventoryData.length === 0) { // Use summarized data length
+                        printableArea.style.display = 'none';
+                    }
+                    printableArea.style.padding = '0';
+                });
+            });
+
+            sendWhatsappBtn.addEventListener('click', () => {
+                if (summarizedInventoryData.length === 0) { // Use summarized data length
+                    alert('لا توجد بيانات لإرسالها عبر واتساب.');
+                    return;
+                }
+
+                let message = `*نظام إدارة مخازن الرحماني*\n`;
+                message += `*تاريخ اليوم: ${currentDateDisplay.textContent}*\n`;
+                message += `*بيانات المخزون للمخزن: ${selectedWarehouse || 'غير محدد'}*\n\n`;
+
+                const visibleColumns = getVisibleColumns();
+
+                summarizedInventoryData.forEach(productSummary => { // Iterate over summarized data
+                    message += `*المنتج: ${productSummary['Inventory_Item_name']}* (${productSummary['original_records_count']} تحديثات)\n`;
+                    visibleColumns.forEach(headerInfo => {
+                        const value = productSummary[headerInfo.key]; // Directly use the summarized value
+                        const formattedValue = headerInfo.format ? headerInfo.format(value) : value;
+                        // For Inventory_Date, we want to show it as "تاريخ الجرد: [التاريخ]"
+                        // For other fields, just the value as it's already summarized
+                        message += `  - ${headerInfo.label}: ${formattedValue}\n`;
+                    });
+                    message += `\n`; // Add a line break after each product's details
+                    message += `--------------------\n\n`;
+                });
+
+                const encodedMessage = encodeURIComponent(message);
+                const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+                window.open(whatsappUrl, '_blank');
+            });
+
+            // Initial calls
+            initializeColumnControls();
+            fetchAndProcessData();
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedWarehouseForInventory = localStorage.getItem('selectedWarehouseForInventory');
+            if (!selectedWarehouseForInventory) {
+                window.location.href = './../index.html';
+            } else {
+                // You can add further logic here if the warehouse is selected
+            }
+        });
+    </script>
+</body>
+</html>

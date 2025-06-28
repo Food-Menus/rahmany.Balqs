@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Delete Warehouse Inventory</title>
+    <style>
+    </style>
+</head>
+<body>
+    <div>
+        <h1>إدارة حذف المستودعات</h1>
+
+        <div id="message-box"></div>
+
+        <section>
+            <h2>حذف جميع بيانات المستودع</h2>
+            <p>سيتم حذف سجلات المستودع المحدد تلقائيًا من التخزين المحلي.</p>
+            <button id="deleteByWarehouseBtn">
+                حذف جميع سجلات هذا المستودع
+            </button>
+        </section>
+
+    </div>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYKYvIMD-kl3xJKmt1LdFnM8vZAAwywNvHlhss305xp-2NBdmmDhknrbPY5eQBCgjD/exec";
+
+        const messageBox = document.getElementById('message-box');
+
+        const deleteByWarehouseBtn = document.getElementById('deleteByWarehouseBtn');
+
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.style.display = 'block';
+
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+            }, 5000);
+        }
+
+        function clearInputs() {
+        }
+
+        function confirm(message) {
+            return new Promise((resolve) => {
+                const modal = document.createElement('div');
+                modal.style.position = 'fixed';
+                modal.style.top = '0';
+                modal.style.left = '0';
+                modal.style.width = '100%';
+                modal.style.height = '100%';
+                modal.style.backgroundColor = 'rgba(0,0,0,0.5)';
+                modal.style.display = 'flex';
+                modal.style.alignItems = 'center';
+                modal.style.justifyContent = 'center';
+                modal.style.zIndex = '999';
+
+                const modalContent = document.createElement('div');
+                modalContent.style.backgroundColor = 'white';
+                modalContent.style.padding = '20px';
+                modalContent.style.borderRadius = '8px';
+                modalContent.style.boxShadow = '0 4px 6px rgba(0,0,0,0.1)';
+                modalContent.style.width = '300px';
+                modalContent.style.textAlign = 'center';
+
+                modalContent.innerHTML = `
+                    <h3>تأكيد</h3>
+                    <p>${message}</p>
+                    <div style="margin-top: 15px;">
+                        <button id="confirmYes" style="padding: 8px 16px; margin-right: 10px; background-color: green; color: white; border: none; border-radius: 4px; cursor: pointer;">نعم</button>
+                        <button id="confirmNo" style="padding: 8px 16px; background-color: red; color: white; border: none; border-radius: 4px; cursor: pointer;">لا</button>
+                    </div>
+                `;
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+
+                document.getElementById('confirmYes').onclick = () => {
+                    modal.remove();
+                    resolve(true);
+                };
+                document.getElementById('confirmNo').onclick = () => {
+                    modal.remove();
+                    resolve(false);
+                };
+            });
+        }
+
+
+        deleteByWarehouseBtn.addEventListener('click', async () => {
+            const warehouseName = localStorage.getItem('selectedWarehouseForInventory');
+
+            if (!warehouseName) {
+                showMessage('لم يتم تحديد اسم مستودع في التخزين المحلي (selectedWarehouseForInventory).', 'error');
+                return;
+            }
+
+            const confirmed = await confirm(`هل أنت متأكد أنك تريد حذف جميع السجلات للمستودع "${warehouseName}"؟ لا يمكن التراجع عن هذا الإجراء.`);
+            if (!confirmed) {
+                return;
+            }
+
+            try {
+                deleteByWarehouseBtn.textContent = 'جاري الحذف...';
+                deleteByWarehouseBtn.disabled = true;
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify({
+                        action: 'deleteByWarehouse',
+                        warehouseValue: warehouseName
+                    })
+                });
+                const result = await response.json();
+
+                if (result.status === 'success' || result.status === 'info') {
+                    showMessage(result.message, result.status);
+                } else {
+                    showMessage(`خطأ: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting by warehouse:', error);
+                showMessage('حدث خطأ غير متوقع أثناء الحذف حسب المستودع. يرجى التحقق من وحدة التحكم.', 'error');
+            } finally {
+                deleteByWarehouseBtn.textContent = 'حذف جميع سجلات هذا المستودع';
+                deleteByWarehouseBtn.disabled = false;
+            }
+        });
+
+    </script>
+</body>
+</html>

@@ -1,0 +1,655 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./../server/static/icon.png" type="image/x-icon">
+    <title>The Rahmany</title>
+    <link rel="stylesheet" href="./../server/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+/* General Styles (الأنماط العامة) */
+body {
+    /* الخط Almarai تم تعريفه بالفعل في الـ @import و * selector */
+    /* background-color: var(--light-bg); - هذا المتغير غير موجود في الـ :root المقدم، سأعتمد على الخلفية المتدرجة الموجودة */
+    color: var(--text-color);
+    direction: rtl; /* التأكد من الاتجاه اليمين لليسار */
+}
+
+/* .container تم تعريفه بالفعل في الـ style.css الخارجي وهو جيد */
+
+h1, h2, h3 {
+    color: var(--dark-green); /* استخدام --dark-green بدلاً من --dark-main ليتناسق مع الأنماط الخارجية */
+}
+
+h1 {
+    font-size: 2.2em; /* تكبير بسيط للحجم ليتناسب مع العناوين الأخرى */
+    margin-bottom: 2rem;
+    text-align: center;
+}
+
+h2 {
+    font-size: 1.8em;
+    margin-bottom: 1.5rem;
+}
+
+section {
+    background-color: var(--light-bg-card);
+    padding: 1.8rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.25rem 1rem rgba(0, 0, 0, 0.08); /* ظل أقوى قليلاً */
+    margin-bottom: 2rem;
+    border: 0.0625rem solid var(--border-color);
+}
+
+/* Message Box Styles (أنماط صندوق الرسائل) */
+#message-box {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    border-radius: 0.5rem;
+    display: none; /* مخفي افتراضياً */
+    font-weight: 600;
+    text-align: center;
+    color: var(--white); /* لون نص موحد للرسائل */
+}
+
+#message-box.success {
+    background-color: var(--dark-green); /* استخدام --dark-green للنجاح */
+    display: block;
+}
+
+#message-box.error {
+    background-color: var(--error-color); /* استخدام --error-color للخطأ */
+    display: block;
+}
+
+#message-box.info {
+    background-color: var(--dark-blue); /* استخدام --dark-blue للمعلومات */
+    display: block;
+}
+
+/* Button Styles (أنماط الأزرار) */
+button {
+    background-color: var(--dark-blue);
+    color: var(--white);
+    border: none;
+    padding: 0.8rem 1.8rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+    font-size: 1em;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    width: 100%; /* جعل الزر يأخذ عرض العنصر الأب بالكامل */
+    margin-top: 1rem;
+    box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.1); /* إضافة ظل خفيف */
+    /* تثبيت الألوان والمظهر على iOS */
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}
+
+button:hover {
+    background-color: #1565c0; /* لون أغمق قليلاً من var(--dark-blue) */
+    transform: translateY(-0.125rem);
+}
+
+button:active {
+    transform: translateY(0);
+}
+
+#deleteByWarehouseBtn { /* تطبيق النمط على الزر */
+    background-color: var(--error-color);
+    margin-top: 1rem; /* هامش علوي ليتناسق مع الأزرار الأخرى */
+}
+
+#deleteByWarehouseBtn:hover {
+    background-color: #c0392b; /* لون أحمر أغمق قليلاً عند التحويم */
+}
+
+/* Existing Styles from Original CSS (الأنماط الموجودة من الـ CSS الأصلي) */
+.item-inventory-section {
+    margin-top: 2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.item-card {
+    background-color: var(--light-bg-card);
+    padding: 1.5rem;
+    border-radius: 0.8rem;
+    box-shadow: 0 0.2rem 0.8rem rgba(0, 0, 0, 0.05);
+    text-align: right;
+    border: 0.0625rem solid var(--border-color);
+    transition: transform 0.2s ease-in-out; /* إضافة انتقال عند التحويم */
+}
+
+.item-card:hover {
+    transform: translateY(-0.25rem); /* تأثير رفع بسيط عند التحويم */
+}
+
+.item-card h3 {
+    color: var(--dark-blue); /* استخدام --dark-blue بدلاً من --secondary-accent */
+    margin-bottom: 1rem;
+    font-size: 1.4em;
+}
+
+.item-card p {
+    font-size: 0.95em;
+    color: var(--text-color); /* استخدام --text-color ليتناسق مع الأنماط العامة */
+    margin-bottom: 0.6rem;
+}
+
+.item-card .form-group {
+    margin-bottom: 0.8rem;
+}
+
+.item-card .form-group label {
+    font-size: 0.9em;
+    color: var(--text-color);
+    font-weight: 500;
+}
+
+.item-card .form-group input {
+    padding: 0.6rem;
+    border-radius: 0.4rem;
+    width: 100%;
+    box-sizing: border-box;
+    border: 0.0625rem solid var(--border-color);
+    background-color: var(--white);
+    color: var(--text-color);
+    direction: rtl;
+    text-align: right;
+}
+
+.loader {
+    border: 0.25rem solid #f3f3f3;
+    border-top: 0.25rem solid var(--dark-blue); /* استخدام --dark-blue */
+    border-radius: 50%;
+    width: 2.5rem;
+    height: 2.5rem;
+    animation: spin 1s linear infinite;
+    margin: 1.25rem auto;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.form-group select {
+    width: 100%;
+    padding: 0.75rem;
+    border: 0.0625rem solid var(--border-color);
+    border-radius: 0.5rem;
+    font-size: 1em;
+    direction: rtl;
+    text-align: right;
+    background-color: var(--white);
+    color: var(--text-color);
+    /* الأنماط الإضافية للـ select من الـ style.css الخارجي تمثل تحسيناً جيداً وتظل كما هي */
+}
+
+/* Modal Styles (أنماط النافذة المنبثقة) */
+.custom-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.6); /* جعل الخلفية أغمق قليلاً */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.custom-modal-content {
+    background-color: var(--white);
+    padding: 2rem;
+    border-radius: 1rem;
+    box-shadow: 0 0.5rem 1.5rem rgba(0, 0, 0, 0.25); /* ظل أقوى وأكثر وضوحاً */
+    text-align: center;
+    max-width: 28rem;
+    width: 90%;
+    animation: fadeIn 0.3s ease-out;
+}
+
+.custom-modal-content h3 {
+    color: var(--dark-green); /* استخدام --dark-green */
+    margin-bottom: 1.5rem;
+    font-size: 1.7em;
+}
+
+.custom-modal-content p {
+    color: var(--text-color);
+    margin-bottom: 2rem;
+    font-size: 1.05em;
+    line-height: 1.6;
+}
+
+.custom-modal-content .modal-buttons {
+    display: flex;
+    justify-content: space-around;
+    gap: 1rem;
+}
+
+.custom-modal-content .modal-buttons button {
+    padding: 0.8rem 1.5rem;
+    border-radius: 0.5rem;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    flex-grow: 1; /* لجعل الأزرار تتمدد بشكل متساوٍ */
+    width: auto; /* إلغاء عرض 100% المطبق على الأزرار العامة */
+    margin-top: 0; /* إلغاء الهامش العلوي المطبق على الأزرار العامة */
+}
+
+.custom-modal-content .modal-buttons button:hover {
+    transform: translateY(-0.125rem);
+}
+
+.custom-modal-content .modal-buttons #modalConfirmYes {
+    background-color: var(--dark-green); /* استخدام --dark-green للزر الإيجابي */
+    color: var(--white);
+    border: none;
+}
+
+.custom-modal-content .modal-buttons #modalConfirmYes:hover {
+    background-color: #2e7d32; /* لون أغمق لـ --dark-green */
+}
+
+.custom-modal-content .modal-buttons #modalConfirmNo {
+    background-color: var(--error-color);
+    color: var(--white);
+    border: none;
+}
+
+.custom-modal-content .modal-buttons #modalConfirmNo:hover {
+    background-color: #c0392b;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* الأنماط الخاصة بالرسائل والنصوص (statusMessage) */
+#statusMessage {
+    color: var(--error-color); /* اللون الافتراضي للخطأ */
+    font-weight: bold;
+    margin-top: 1.25rem;
+    text-align: center;
+}
+
+#statusMessage[style*="var(--secondary-accent)"] { /* للكود اللي بيغير لون الـ statusMessage للون النجاح */
+    color: var(--dark-green) !important; /* استخدام --dark-green بدلاً من --secondary-accent للاتساق */
+}
+#statusMessage[style*="var(--info-color)"] { /* لو فيه info-color */
+    color: var(--dark-blue) !important;
+}
+
+#currentWarehouseDisplay {
+    text-align: center;
+    color: var(--dark-blue);
+    margin-bottom: 1.5rem;
+    font-size: 1.6em;
+    font-weight: 600;
+}
+
+/* الأنماط التي كانت في confirm() function القديمة تم دمجها مع custom-modal-overlay */
+/* تأكد من أن confirm() تستخدم customConfirm() أو عدل أنماطها لتتوافق */
+    </style>
+</head>
+<body>
+
+        <br><br>
+        <div class="container">
+            <h1>إدارة الجرد اليومي للعناصر</h1>
+
+            <h2 id="currentWarehouseDisplay" style="text-align: center; color: var(--dark-main); margin-bottom: 25px;"></h2>
+
+            <div id="loadingIndicator" class="loader" style="display: none;"></div>
+            
+            <div id="itemInventorySection" class="item-inventory-section">
+                </div>
+
+            <button id="submitAllInventory">تسجيل جرد العناصر المحددة</button>
+            
+            <div id="statusMessage" style="margin-top: 20px; font-weight: bold;"></div>
+        </div>
+        <div>
+
+        <div id="message-box"></div>
+
+        <br><br>
+        <section>
+            <h2>حذف جميع بيانات المستودع</h2>
+            <p>سيتم حذف سجلات المستودع المحدد تلقائيًا من التخزين المحلي.</p>
+            <button id="deleteByWarehouseBtn">
+                حذف جميع سجلات هذا المستودع
+            </button>
+        </section>
+
+    </div>
+
+    <script src="./../server/script.js"></script>
+
+    <script>
+        // Update these URLs with your deployed Google Apps Script Web App URLs
+        // هذا الرابط لجدول بيانات العناصر (Item_Name, Item_prise, etc.)
+        const ITEM_DETAILS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx2hzMhKlJ3eMLuF42JSX7GHyjmOP490SMFheFjw6QX38FyohsPpZ8reax_ygF9mQg/exec'; 
+        // هذا الرابط لجدول سجلات الجرد (Inventory_Date, Inventory_Existing, etc.)
+        const INVENTORY_UPDATE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzG8X6aHuRJ0-eGX_NxTnyhd-WwhtCXcgVK_49Qc2klqv_x6k7PQgmalel0SvkJX18A/exec'; 
+
+        const itemInventorySection = document.getElementById('itemInventorySection');
+        const submitAllInventoryButton = document.getElementById('submitAllInventory');
+        const loadingIndicator = document.getElementById('loadingIndicator');
+        const statusMessage = document.getElementById('statusMessage');
+        const currentWarehouseDisplay = document.getElementById('currentWarehouseDisplay');
+
+        let allFetchedItems = []; // To store all items fetched from the item details sheet
+
+        // Function to set and get the selected warehouse from localStorage
+        function getSelectedWarehouse() {
+            return localStorage.getItem('selectedWarehouseForInventory') || '';
+        }
+
+        // Initialize warehouse display and load items
+        document.addEventListener('DOMContentLoaded', async () => {
+            await fetchAndDisplayItems(); // Fetch and display items based on selected warehouse from localStorage
+
+            submitAllInventoryButton.addEventListener('click', handleSubmitAllInventory);
+        });
+
+        async function fetchAndDisplayItems() {
+            loadingIndicator.style.display = 'block';
+            showMessage('', 'info'); // Clear previous messages
+            itemInventorySection.innerHTML = ''; // Clear previous items
+            statusMessage.textContent = ''; // Clear status message
+
+            const selectedWarehouse = getSelectedWarehouse();
+            
+            // تحديث عرض اسم المخزن في أعلى الصفحة
+            if (selectedWarehouse) {
+                currentWarehouseDisplay.textContent = `جرد مخزن: ${selectedWarehouse}`; // استخدام الاسم مباشرة من localStorage
+            } else {
+                currentWarehouseDisplay.textContent = 'الرجاء تحديد مخزن في صفحة البروفايل أولاً.';
+            }
+
+            if (!selectedWarehouse) {
+                loadingIndicator.style.display = 'none';
+                itemInventorySection.innerHTML = '<p style="text-align: center; color: #757575;">لا توجد عناصر لهذا المخزن. أضف عناصر جديدة أو اختر مخزنًا آخر.</p>';
+                return;
+            }
+
+            try {
+                // Fetch all items from the item details sheet (GET request)
+                const response = await fetch(ITEM_DETAILS_WEB_APP_URL, {
+                    method: 'GET',
+                    mode: 'cors'
+                });
+
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+
+                const result = await response.json();
+
+                if (result.status === "success" && result.data) {
+                    allFetchedItems = result.data; // Store all fetched items
+                    renderFilteredItems(allFetchedItems, selectedWarehouse);
+                } else {
+                    showMessage(result.message || 'خطأ في تحميل بيانات العناصر.', 'error');
+                }
+            } catch (error) {
+                console.error('Error fetching item details:', error);
+                showMessage(`حدث خطأ أثناء تحميل بيانات العناصر: ${error.message}`, 'error');
+            } finally {
+                loadingIndicator.style.display = 'none';
+            }
+        }
+
+        function renderFilteredItems(items, warehouseFilter) {
+            itemInventorySection.innerHTML = '';
+            // Filter based on 'Item_warehouse' column in the fetched data
+            const filteredItems = items.filter(item => item.Item_warehouse === warehouseFilter);
+
+            if (filteredItems.length === 0) {
+                itemInventorySection.innerHTML = '<p style="text-align: center; color: #757575;">لا توجد عناصر لهذا المخزن. أضف عناصر جديدة أو اختر مخزنًا آخر.</p>';
+                return;
+            }
+
+            filteredItems.forEach(item => {
+                const itemCard = document.createElement('div');
+                itemCard.classList.add('item-card');
+                itemCard.innerHTML = `
+                    <h3>${item.Item_Name}</h3>
+                    <p>المخزن: ${item.Item_warehouse}</p>
+                    <div class="form-group">
+                        <label for="newStock-${item.Item_Name.replace(/\s+/g, '-')}-input">المخزون الجديد المضاف:</label>
+                        <input type="number" id="newStock-${item.Item_Name.replace(/\s+/g, '-')}-input" 
+                               data-item-name="${item.Item_Name}" 
+                               data-item-price="${item.Item_prise}" 
+                               data-item-warehouse="${item.Item_warehouse}"
+                               data-stock-type="new" step="1" >
+                    </div>
+                    <div class="form-group">
+                        <label for="pullStock-${item.Item_Name.replace(/\s+/g, '-')}-input">المخزون المسحوب:</label>
+                        <input type="number" id="pullStock-${item.Item_Name.replace(/\s+/g, '-')}-input" 
+                               data-item-name="${item.Item_Name}" 
+                               data-item-price="${item.Item_prise}" 
+                               data-item-warehouse="${item.Item_warehouse}"
+                               data-stock-type="pull" step="1">
+                    </div>
+                `;
+                itemInventorySection.appendChild(itemCard);
+            });
+        }
+                    // <p>السعر: ${item.Item_prise}</p>
+
+        async function handleSubmitAllInventory() {
+            statusMessage.textContent = '';
+            const itemCards = itemInventorySection.querySelectorAll('.item-card');
+            const updates = [];
+
+            itemCards.forEach(card => {
+                const newStockInput = card.querySelector('input[data-stock-type="new"]');
+                const pullStockInput = card.querySelector('input[data-stock-type="pull"]');
+
+                const itemName = newStockInput.dataset.itemName;
+                const itemPrice = parseFloat(newStockInput.dataset.itemPrice);
+                const itemWarehouse = newStockInput.dataset.itemWarehouse;
+                const newStockValue = parseFloat(newStockInput.value) || 0;
+                const pullStockValue = parseFloat(pullStockInput.value) || 0;
+
+                // Only add to updates if there's a non-zero change
+                if (newStockValue !== 0 || pullStockValue !== 0) {
+                    updates.push({
+                        itemName: itemName,
+                        itemPrice: itemPrice,
+                        itemWarehouse: itemWarehouse,
+                        newStockInput: newStockValue,
+                        pullStockInput: pullStockValue
+                    });
+                }
+            });
+
+            if (updates.length === 0) {
+                showMessage('لا توجد تحديثات لتسجيلها.', 'error');
+                return;
+            }
+
+            loadingIndicator.style.display = 'block';
+            submitAllInventoryButton.disabled = true;
+
+            let successCount = 0;
+            let errorCount = 0;
+            const errors = [];
+
+            for (const update of updates) {
+                try {
+                    // Prepare the payload including an 'action' field
+                    const payload = {
+                        action: 'updateInventory', // Add action type for Google Apps Script
+                        ...update // Spread all update details
+                    };
+
+                    const response = await fetch(INVENTORY_UPDATE_WEB_APP_URL, {
+                        method: 'POST',
+                        mode: 'no-cors', // For Google Apps Script Web Apps
+                        headers: {
+                            // IMPORTANT: For 'no-cors' with Google Apps Script, Content-Type must be 'text/plain'
+                            'Content-Type': 'text/plain;charset=utf-8', 
+                        },
+                        body: JSON.stringify(payload) // Send the full payload as JSON string
+                    });
+                    // Since 'no-cors', we can't check response.ok or read JSON directly.
+                    // We assume success if no network error occurred.
+                    successCount++;
+                    // Optionally reset inputs for this item after successful submission
+                    document.getElementById(`newStock-${update.itemName.replace(/\s+/g, '-')}-input`).value = '0';
+                    document.getElementById(`pullStock-${update.itemName.replace(/\s+/g, '-')}-input`).value = '0';
+
+                } catch (error) {
+                    console.error(`Error updating inventory for ${update.itemName}:`, error);
+                    errorCount++;
+                    errors.push(update.itemName);
+                }
+            }
+
+            loadingIndicator.style.display = 'none';
+            submitAllInventoryButton.disabled = false;
+
+            if (errorCount === 0) {
+                showMessage(`تم تسجيل جرد ${successCount} عنصر بنجاح!`, 'success');
+            } else {
+                showMessage(`تم تسجيل جرد ${successCount} عنصر بنجاح، وحدث خطأ في تسجيل ${errorCount} عنصر: ${errors.join(', ')}. تحقق من الكونسول للمزيد من التفاصيل.`, 'error');
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedWarehouseForInventory = localStorage.getItem('selectedWarehouseForInventory');
+            if (!selectedWarehouseForInventory) {
+                window.location.href = './../index.html'; // Redirect to login page if no username (or warehouse) is selected
+            }
+        });
+    </script>
+
+    <script>
+        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYKYvIMD-kl3xJKmt1LdFnM8vZAAwywNvHlhss305xp-2NBdmmDhknrbPY5eQBCgjD/exec";
+
+        const messageBox = document.getElementById('message-box');
+
+        const deleteByWarehouseBtn = document.getElementById('deleteByWarehouseBtn');
+
+        function showMessage(message, type) {
+            messageBox.textContent = message;
+            messageBox.className = ''; // Clear existing classes
+            messageBox.classList.add(type); // Add the new type class (success, error, info)
+            messageBox.style.display = 'block';
+
+            setTimeout(() => {
+                messageBox.style.display = 'none';
+                messageBox.textContent = ''; // Clear text after hiding
+            }, 5000);
+        }
+
+        // Modified confirm function to require a string of digits from 1 to 9
+        function confirm(message) {
+            return new Promise((resolve) => {
+                const modal = document.createElement('div');
+                modal.classList.add('custom-modal-overlay'); // Use the existing modal overlay style
+
+                const modalContent = document.createElement('div');
+                modalContent.classList.add('custom-modal-content'); // Use the existing modal content style
+
+                modalContent.innerHTML = `
+                    <h3>تأكيد الحذف</h3>
+                    <p>${message}</p>
+                    <p>الرجاء إدخال أرقام من 1 إلى 9 للتأكيد:</p>
+                    <input type="text" id="confirmationInput" 
+                           pattern="[1-9]+" title="الرجاء إدخال أرقام من 1 إلى 9 فقط."
+                           style="width: 100%; padding: 10px; margin-bottom: 15px; border: 1px solid #ccc; border-radius: 5px; text-align: center;"
+                           inputmode="numeric">
+                    <div class="modal-buttons">
+                        <button id="modalConfirmYes">تأكيد</button>
+                        <button id="modalConfirmNo">إلغاء</button>
+                    </div>
+                    <p id="confirmationError" style="color: var(--error-color); margin-top: 10px; display: none;"></p>
+                `;
+                modal.appendChild(modalContent);
+                document.body.appendChild(modal);
+
+                const confirmationInput = document.getElementById('confirmationInput');
+                const confirmationError = document.getElementById('confirmationError');
+
+                document.getElementById('modalConfirmYes').onclick = () => {
+                    const inputValue = confirmationInput.value;
+                    // Check if the input contains only digits from 1 to 9
+                    const isValid = /^[1-9]+$/.test(inputValue);
+                    
+                    if (isValid) {
+                        modal.remove();
+                        resolve(true);
+                    } else {
+                        confirmationError.textContent = 'الرجاء إدخال أرقام من 1 إلى 9 فقط (مثل 123 أو 45).';
+                        confirmationError.style.display = 'block';
+                    }
+                };
+                document.getElementById('modalConfirmNo').onclick = () => {
+                    modal.remove();
+                    resolve(false);
+                };
+            });
+        }
+
+
+        deleteByWarehouseBtn.addEventListener('click', async () => {
+            const warehouseName = localStorage.getItem('selectedWarehouseForInventory');
+
+            if (!warehouseName) {
+                showMessage('لم يتم تحديد اسم مستودع في التخزين المحلي (selectedWarehouseForInventory).', 'error');
+                return;
+            }
+
+            const confirmed = await confirm(`هل أنت متأكد أنك تريد حذف جميع السجلات للمستودع "${warehouseName}"؟ لا يمكن التراجع عن هذا الإجراء.`);
+            if (!confirmed) {
+                showMessage('تم إلغاء عملية الحذف.', 'info');
+                return;
+            }
+
+            try {
+                deleteByWarehouseBtn.textContent = 'جاري الحذف...';
+                deleteByWarehouseBtn.disabled = true;
+
+                const response = await fetch(SCRIPT_URL, {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'text/plain;charset=utf-8'
+                    },
+                    body: JSON.stringify({
+                        action: 'deleteByWarehouse',
+                        warehouseValue: warehouseName
+                    })
+                });
+                
+                const result = await response.json();
+
+
+                if (result.status === 'success' || result.status === 'info') {
+                    showMessage(result.message, result.status);
+                } else {
+                    showMessage(`خطأ: ${result.message}`, 'error');
+                }
+            } catch (error) {
+                console.error('Error deleting by warehouse:', error);
+                showMessage('حدث خطأ غير متوقع أثناء الحذف حسب المستودع. يرجى التحقق من وحدة التحكم.', 'error');
+            } finally {
+                deleteByWarehouseBtn.textContent = 'حذف جميع سجلات هذا المستودع';
+                deleteByWarehouseBtn.disabled = false;
+            }
+        });
+
+    </script>
+</body>
+</html>

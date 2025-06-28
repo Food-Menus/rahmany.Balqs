@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" href="./../server/static/icon.png" type="image/x-icon">
+    <title>The Rahmany</title>
+    <link rel="stylesheet" href="./../server/static/style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+<body>
+    <div class="container">
+        <h1>إضافة عنصر جديد</h1>
+        <form id="addItemForm">
+            <div class="form-group">
+                <label for="itemName">اسم العنصر:</label>
+                <input type="text" id="itemName" name="itemName" required>
+            </div>
+             <div class="form-group">
+                <label for="itemPrise">السعر:</label>
+                <input type="number" id="itemPrise" name="itemPrise" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="itemDescription">الوصف:</label>
+                <textarea id="itemDescription" name="itemDescription" rows="3"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="itemWeight">الوزن:</label>
+                <input type="number" id="itemWeight" name="itemWeight" step="0.01" required>
+            </div>
+            <div class="form-group">
+                <label for="itemSize">المقاس:</label>
+                <textarea id="itemSize" name="itemSize" rows="3"></textarea>
+            </div>
+            <!-- تم إزالة حقل اختيار المخزن هنا، سيتم الحصول عليه من localStorage -->
+            <button type="submit">إضافة العنصر</button>
+        </form>
+    </div>
+
+    <script src="./../server/script.js"></script>
+    <script>
+        // تأكد أن هذا الرابط هو الرابط الصحيح لتطبيق Google Apps Script Web App الخاص بجدول تفاصيل العناصر
+        const GOOGLE_SHEET_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbx2hzMhKlJ3eMLuF42JSX7GHyjmOP490SMFheFjw6QX38FyohsPpZ8reax_ygF9mQg/exec'; 
+
+        // وظيفة لجلب المخزن المحدد من localStorage (تم تعيينها في صفحة إدارة الجرد اليومي)
+        function getSelectedWarehouse() {
+            return localStorage.getItem('selectedWarehouseForInventory') || '';
+        }
+
+        document.getElementById('addItemForm').addEventListener('submit', async function(event) {
+            event.preventDefault();
+
+            const itemWarehouse = getSelectedWarehouse(); // الحصول على المخزن من localStorage
+            
+            if (!itemWarehouse) {
+                // رسالة تنبيه إذا لم يتم اختيار مخزن في صفحة الجرد اليومي
+                alert('الرجاء اختيار مخزن في صفحة إدارة الجرد اليومي أولاً!');
+                return;
+            }
+
+            const item = {
+                Item_Name: document.getElementById('itemName').value,
+                Item_prise: parseFloat(document.getElementById('itemPrise').value),
+                Item_Details: document.getElementById('itemDescription').value,
+                Item_Weight: parseFloat(document.getElementById('itemWeight').value),
+                Item_Size: document.getElementById('itemSize').value,
+                Item_warehouse: itemWarehouse, // استخدام قيمة المخزن من localStorage
+            };
+
+            try {
+                const response = await fetch(GOOGLE_SHEET_WEB_APP_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // مهم لـ Google Apps Script Web App لتجنب مشاكل CORS
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(item)
+                });
+
+                // بما أن mode هو 'no-cors', لن نتمكن من الحصول على حالة الاستجابة مباشرة.
+                // نفترض النجاح إذا لم يحدث خطأ في الشبكة.
+                alert('تمت إضافة العنصر بنجاح! سيتم حفظ بياناتك في Google Sheet.');
+                document.getElementById('addItemForm').reset();
+            } catch (error) {
+                console.error('Error adding item:', error);
+                alert('حدث خطأ أثناء إضافة العنصر. يرجى المحاولة مرة أخرى لاحقًا.');
+            }
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+        const selectedWarehouseForInventory = localStorage.getItem('selectedWarehouseForInventory');
+        if (!selectedWarehouseForInventory) {
+            window.location.href = './../index.html'; // إعادة التوجيه إلى صفحة تسجيل الدخول إذا لم يكن هناك اسم مستخدم
+        } else {
+            document.getElementById('selectedWarehouseForInventory').textContent = selectedWarehouseForInventory;
+        }
+        });
+    </script>
+</body>
+</html>
