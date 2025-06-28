@@ -589,10 +589,10 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            const spreadsheetId = '1GfKMjGQybK2i8sgVvEaxYkwB9QoZBGy_fIJXDqNXu98';
+            const spreadsheetId = '1uCWUIKNJ66WOmwM_lXTF1Z6IMVyiUTCBswxOUzyurQw'; 
             const sheetUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
             const selectedWarehouse = localStorage.getItem('selectedWarehouseForInventory');
-            const whatsappNumber = '+201068452537';
+            const whatsappNumber = '+201068452537'; 
 
             const loadingMessage = document.getElementById('loading-message');
             const errorMessage = document.getElementById('error-message');
@@ -606,7 +606,7 @@
             const columnCheckboxesContainer = document.getElementById('column-checkboxes');
             const applyColumnsBtn = document.getElementById('apply-columns-btn');
 
-            let allInventoryData = []; // Store all fetched data to re-filter
+            let allInventoryData = []; // Store all fetched data to re-filter  https://script.google.com/macros/s/AKfycbwaWQ0oIhLbLOYEyx_fWTaHSkXnfhwbiKrvuaPT8ORptDC1pEF_JukQaFB2Y0hUS3k/exec
             let summarizedInventoryData = []; // Data after summarization for display
 
             // Define all possible headers and their configurations

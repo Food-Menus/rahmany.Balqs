@@ -51,8 +51,8 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             const usernameSelect = document.getElementById('username');
-            const errorMessageDiv = document.getElementById('error-message');
-            const spreadsheetId = '1m2lG_BqYVosJKJDMPisFiy3nf0ndAoPDb_afB6xwPJ4'; // معرف جدول بيانات المستخدمين
+            const errorMessageDiv = document.getElementById('error-message'); 
+            const spreadsheetId = '1fC7GwTCcbtH0SrhPseKJevLANmabOs2Y0NtO9wx41rs'; // معرف جدول بيانات المستخدمين https://script.google.com/macros/s/AKfycbxLAeN9pbbk97vusyGorcXq8m02SQVyFCQU4Jrunu3wYj-No6RdVcl3ovYDvegZ_Bm1/exec
             const usersCsvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
 
             try {
@@ -106,7 +106,7 @@
                 return; // Stop execution if no username is selected
             }
 
-            const spreadsheetId = '1m2lG_BqYVosJKJDMPisFiy3nf0ndAoPDb_afB6xwPJ4';
+            const spreadsheetId = '1fC7GwTCcbtH0SrhPseKJevLANmabOs2Y0NtO9wx41rs';
             const usersCsvUrl = `https://docs.google.com/spreadsheets/d/${spreadsheetId}/export?format=csv`;
 
             try {
