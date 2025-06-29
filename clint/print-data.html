@@ -609,7 +609,7 @@
             let allInventoryData = []; // Store all fetched data to re-filter  https://script.google.com/macros/s/AKfycbwaWQ0oIhLbLOYEyx_fWTaHSkXnfhwbiKrvuaPT8ORptDC1pEF_JukQaFB2Y0hUS3k/exec
             let summarizedInventoryData = []; // Data after summarization for display
 
-            // Define all possible headers and their configurations
+            // Define all possible headers and their configurationshttps://docs.google.com/spreadsheets/d/1uCWUIKNJ66WOmwM_lXTF1Z6IMVyiUTCBswxOUzyurQw/edit?usp=sharing
             // Added 'aggregationType' to define how each column should be processed
             const allHeadersConfig = [
                 { label: 'تاريخ الجرد', key: 'Inventory_Date', format: (val) => val ? new Date(val.split(' ')[0]).toLocaleDateString('ar-EG') : '', defaultVisible: true, aggregationType: 'latest' },

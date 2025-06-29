@@ -337,9 +337,9 @@ button:active {
     <script>
         // Update these URLs with your deployed Google Apps Script Web App URLs
         // هذا الرابط لجدول بيانات العناصر (Item_Name, Item_prise, etc.)
-        const ITEM_DETAILS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiy5gslqacBYeq1irop8YJgwlGccYD2-uFCv76g7KmytGVex6N2lsoxYgK2vsnlOQ/exec'; 
-        // هذا الرابط لجدول سجلات الجرد (Inventory_Date, Inventory_Existing, etc.)
-        const INVENTORY_UPDATE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbzC-dlLLYoTzfOEaMd9DIwttRfUc55WzQXdRMdsjVyMBtG44RX3l8vBG0HHgnA2hDs/exec'; 
+        const ITEM_DETAILS_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyiy5gslqacBYeq1irop8YJgwlGccYD2-uFCv76g7KmytGVex6N2lsoxYgK2vsnlOQ/exec'; // الرابط الجديد
+        // هذا الرابط لجدول سجلات الجرد (Inventory_Date, Inventory_Existing, etc.) وكذلك عمليات الحذف 
+        const INVENTORY_AND_DELETE_WEB_APP_URL = 'https://script.google.com/macros/s/AKfycbyaBnY3TsfLB3DY2CApUR-CbKp6Dd5gETfdIOFKqPcUh9txbksNJESOqeQydAQ08jw/exec'; // الرابط الموحد الجديد
 
         const itemInventorySection = document.getElementById('itemInventorySection');
         const submitAllInventoryButton = document.getElementById('submitAllInventory');
@@ -445,7 +445,7 @@ button:active {
                 itemInventorySection.appendChild(itemCard);
             });
         }
-                    // <p>السعر: ${item.Item_prise}</p>
+            // <p>السعر: ${item.Item_prise}</p>
 
         async function handleSubmitAllInventory() {
             statusMessage.textContent = '';
@@ -490,11 +490,11 @@ button:active {
                 try {
                     // Prepare the payload including an 'action' field
                     const payload = {
-                        action: 'updateInventory', // Add action type for Google Apps Script
+                        action: 'addOrUpdateInventory', // Action type for Google Apps Script
                         ...update // Spread all update details
                     };
 
-                    const response = await fetch(INVENTORY_UPDATE_WEB_APP_URL, {
+                    const response = await fetch(INVENTORY_AND_DELETE_WEB_APP_URL, { // استخدام الرابط الموحد
                         method: 'POST',
                         mode: 'no-cors', // For Google Apps Script Web Apps
                         headers: {
@@ -536,7 +536,7 @@ button:active {
     </script>
 
     <script>
-        const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbyYKYvIMD-kl3xJKmt1LdFnM8vZAAwywNvHlhss305xp-2NBdmmDhknrbPY5eQBCgjD/exec";
+        const SCRIPT_URL_FOR_DELETE = "https://script.google.com/macros/s/AKfycbyaBnY3TsfLB3DY2CApUR-CbKp6Dd5gETfdIOFKqPcUh9txbksNJESOqeQydAQ08jw/exec"; // استخدام الرابط الموحد الجديد لعمليات الحذف
 
         const messageBox = document.getElementById('message-box');
 
@@ -622,7 +622,7 @@ button:active {
                 deleteByWarehouseBtn.textContent = 'جاري الحذف...';
                 deleteByWarehouseBtn.disabled = true;
 
-                const response = await fetch(SCRIPT_URL, {
+                const response = await fetch(INVENTORY_AND_DELETE_WEB_APP_URL, { // استخدام الرابط الموحد الجديد
                     method: 'POST',
                     headers: {
                         'Content-Type': 'text/plain;charset=utf-8'
