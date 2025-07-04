@@ -296,6 +296,43 @@ button:active {
     font-weight: 600;
 }
 
+.green-input {
+    border-color: #4CAF50; /* A nice shade of green for the border */
+    box-shadow: 0 0 15px rgba(76, 175, 80, 0.5); /* A subtle green glow */
+    /* You could also change the text color if you want */
+    /* color: #2E7D32; */ 
+}
+
+.green-input:focus {
+    outline: none;
+    border-color: #388E3C; /* Darker green on focus */
+    box-shadow: 0 0 8px rgba(56, 142, 60, 0.7);
+}
+
+.red-input {
+    border-color: #F44336; /* A red color for the border */
+    box-shadow: 0 0 15px rgba(244, 67, 54, 0.5); /* A subtle red glow */
+    /* You could also change the text color if you want */
+    /* color: #D32F2F; */
+}
+
+.red-input:focus {
+    outline: none;
+    border-color: #D32F2F; /* Darker red on focus */
+    box-shadow: 0 0 8px rgba(211, 47, 47, 0.7);
+}
+
+/* Optional: To apply some general styling to all inputs for better appearance */
+input[type="number"] {
+    padding: 8px;
+    border-radius: 4px;
+    border: 1px solid #ccc;
+    width: 100%;
+    box-sizing: border-box; /* Ensures padding doesn't increase total width */
+    margin-top: 5px;
+    margin-bottom: 10px;
+}
+
 /* الأنماط التي كانت في confirm() function القديمة تم دمجها مع custom-modal-overlay */
 /* تأكد من أن confirm() تستخدم customConfirm() أو عدل أنماطها لتتوافق */
     </style>
@@ -426,20 +463,20 @@ button:active {
                     <h3>${item.Item_Name}</h3>
                     <p>المخزن: ${item.Item_warehouse}</p>
                     <div class="form-group">
-                        <label for="newStock-${item.Item_Name.replace(/\s+/g, '-')}-input">المخزون الجديد المضاف:</label>
+                        <label for="newStock-${item.Item_Name.replace(/\s+/g, '-')}-input">المخزون الجديد المضاف:</label><br>
                         <input type="number" id="newStock-${item.Item_Name.replace(/\s+/g, '-')}-input" 
-                               data-item-name="${item.Item_Name}" 
-                               data-item-price="${item.Item_prise}" 
-                               data-item-warehouse="${item.Item_warehouse}"
-                               data-stock-type="new" step="1" >
+                            data-item-name="${item.Item_Name}" 
+                            data-item-price="${item.Item_prise}" 
+                            data-item-warehouse="${item.Item_warehouse}"
+                            data-stock-type="new" step="1" class="green-input">
                     </div>
                     <div class="form-group">
-                        <label for="pullStock-${item.Item_Name.replace(/\s+/g, '-')}-input">المخزون المسحوب:</label>
+                        <label for="pullStock-${item.Item_Name.replace(/\s+/g, '-')}-input">المخزون المسحوب:</label><br>
                         <input type="number" id="pullStock-${item.Item_Name.replace(/\s+/g, '-')}-input" 
-                               data-item-name="${item.Item_Name}" 
-                               data-item-price="${item.Item_prise}" 
-                               data-item-warehouse="${item.Item_warehouse}"
-                               data-stock-type="pull" step="1">
+                            data-item-name="${item.Item_Name}" 
+                            data-item-price="${item.Item_prise}" 
+                            data-item-warehouse="${item.Item_warehouse}"
+                            data-stock-type="pull" step="1" class="red-input">
                     </div>
                 `;
                 itemInventorySection.appendChild(itemCard);
